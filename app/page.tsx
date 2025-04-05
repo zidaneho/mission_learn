@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GameProvider, useGame } from "../context/GameContext";
+import { GameProvider } from "../context/GameContext";
 import PlanetSelector from "../components/PlanetSelector";
 import QuestionSet from "../components/QuestionSet";
 import Shop from "../components/Shop";
@@ -57,8 +57,9 @@ export default function Home() {
 
         {/* Shop Modal */}
         {showShop && <Shop onClose={() => setShowShop(false)} />}
-        {/* Item Placements */}
-        <ItemPlacements />
+
+        {/* Item Placements: Only show when not in question mode */}
+        {!inQuestionMode && <ItemPlacements />}
       </div>
     </GameProvider>
   );
