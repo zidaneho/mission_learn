@@ -39,6 +39,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('gameState', JSON.stringify({ selectedPlanet, currency, progress, items }));
   }, [selectedPlanet, currency, progress, items]);
 
+  useEffect(() => {
+    setItems(prev => Array.from(new Set(prev)));
+  }, []);
   const addCurrency = (amount: number) => {
     setCurrency(prev => prev + amount);
   };
@@ -48,6 +51,10 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const buyItem = (item: string, cost: number) => {
+    if (items.includes(item)) {
+      alert('You already own this item!');
+      return;
+    }
     if (currency >= cost) {
       setCurrency(prev => prev - cost);
       setItems(prev => [...prev, item]);
