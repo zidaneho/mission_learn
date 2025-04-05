@@ -102,4 +102,9 @@
   .buy-button:hover {
     background-color: #0056b3;
   }
+
+  .shop-item small {
+    color: #666;
+    font-size: 13px;
+  }
   

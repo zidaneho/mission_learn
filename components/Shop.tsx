@@ -1,20 +1,19 @@
+"use client";
+
 // components/Shop.tsx
 import React, { useRef, useEffect } from 'react';
 import { useGame } from '../context/GameContext';
 import './Shop.css';
+import {shopItems,ShopItem} from "../components/ShopItems"
 
-const shopItems = [
-  { id: 'shield', name: 'Shield', cost: 10 },
-  { id: 'engine', name: 'Engine Boost', cost: 15 },
-  // add more items as needed
-];
+
 
 interface ShopProps {
   onClose: () => void;
 }
 
 const Shop: React.FC<ShopProps> = ({ onClose }) => {
-  const { currency, buyItem } = useGame();
+  const { currency, buyItem, items } = useGame();
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Close shop on outside click
@@ -38,19 +37,27 @@ const Shop: React.FC<ShopProps> = ({ onClose }) => {
           Currency: <span>{currency}</span>
         </p>
         <ul className="shop-items">
-          {shopItems.map(item => (
+          {shopItems.map(item => {
+            const alreadyOwned = items.includes(item.name);
+
+            return (
             <li key={item.id} className="shop-item">
               <span>
                 {item.name} - <strong>{item.cost} pts</strong>
               </span>
+              {alreadyOwned ? (
+                <span style={{ fontSize: 12, color: 'gray' }}>✔ Owned</span>
+              ) : (
               <button
                 className="buy-button"
                 onClick={() => buyItem(item.name, item.cost)}
               >
                 Buy
               </button>
+              )}
             </li>
-          ))}
+          );
+          })}
         </ul>
         <button onClick={onClose}>Close Shop</button>
       </div>
