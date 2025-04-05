@@ -28,6 +28,13 @@ interface QuestionSetProps {
 
 const QuestionSet: React.FC<QuestionSetProps> = ({ onComplete, onBack }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  // feedback holds the option index that was clicked and whether it was correct
+  const [feedback, setFeedback] = useState<{ index: number; isCorrect: boolean } | null>(null);
+  // feedbackMessage is displayed below the options
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  // disable options while waiting for feedback flash to complete
+  const [disableOptions, setDisableOptions] = useState(false);
+
   const { addCurrency, selectedPlanet } = useGame();
 
   // Define color themes for each planet (by index order):
@@ -50,13 +57,34 @@ const QuestionSet: React.FC<QuestionSetProps> = ({ onComplete, onBack }) => {
   const currentQuestion = sampleQuestions[currentIndex];
 
   const handleAnswer = (optionIndex: number) => {
+    if (disableOptions) return;
     if (optionIndex === currentQuestion.answer) {
-      addCurrency(5); // Reward 5 points for a correct answer
-    }
-    if (currentIndex < sampleQuestions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+      // Correct answer: flash green and show "Amazing work!"
+      setFeedback({ index: optionIndex, isCorrect: true });
+      setDisableOptions(true);
+      setFeedbackMessage("Amazing work!");
+      addCurrency(5);
+      setTimeout(() => {
+        setFeedback(null);
+        setFeedbackMessage(null);
+        setDisableOptions(false);
+        // Move to next question or complete if at the end
+        if (currentIndex < sampleQuestions.length - 1) {
+          setCurrentIndex(currentIndex + 1);
+        } else {
+          onComplete();
+        }
+      }, 1000);
     } else {
-      onComplete();
+      // Wrong answer: flash red and show error message
+      setFeedback({ index: optionIndex, isCorrect: false });
+      setDisableOptions(true);
+      setFeedbackMessage("That was the wrong option. Try again.");
+      setTimeout(() => {
+        setFeedback(null);
+        setFeedbackMessage(null);
+        setDisableOptions(false);
+      }, 1000);
     }
   };
 
@@ -72,17 +100,24 @@ const QuestionSet: React.FC<QuestionSetProps> = ({ onComplete, onBack }) => {
       </div>
       <p className={`${theme.text} mb-4`}>{currentQuestion.question}</p>
       <ul className="space-y-2">
-        {currentQuestion.options.map((option, index) => (
-          <li key={index}>
-            <button
-              onClick={() => handleAnswer(index)}
-              className="w-full text-left px-4 py-2 bg-white/70 text-black rounded hover:bg-white/90"
-            >
-              {option}
-            </button>
-          </li>
-        ))}
+        {currentQuestion.options.map((option, index) => {
+          let optionClass =
+            "w-full text-left px-4 py-2 bg-white/70 text-black rounded hover:bg-white/90";
+          if (feedback && feedback.index === index) {
+            optionClass = feedback.isCorrect
+              ? "w-full text-left px-4 py-2 bg-green-300 text-black rounded"
+              : "w-full text-left px-4 py-2 bg-red-300 text-black rounded";
+          }
+          return (
+            <li key={index}>
+              <button onClick={() => handleAnswer(index)} className={optionClass} disabled={disableOptions}>
+                {option}
+              </button>
+            </li>
+          );
+        })}
       </ul>
+      {feedbackMessage && <div className="mt-4 text-center font-bold">{feedbackMessage}</div>}
     </div>
   );
 };
