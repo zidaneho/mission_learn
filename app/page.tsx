@@ -20,6 +20,11 @@ export default function Home() {
     setInQuestionMode(false);
   };
 
+  const handleBackToSpaceship = () => {
+    // Back button action from the planet's question view
+    setInQuestionMode(false);
+  };
+  
   return (
     <GameProvider>
       <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] relative">
@@ -31,7 +36,10 @@ export default function Home() {
         {/* Game Main Content */}
         <main className="flex flex-col items-center gap-8">
           {inQuestionMode ? (
-            <QuestionSet onComplete={handleQuestionsComplete} />
+            <QuestionSet 
+              onComplete={handleQuestionsComplete} 
+              onBack={handleBackToSpaceship} 
+            />
           ) : (
             <PlanetSelector onSelect={handlePlanetSelect} />
           )}

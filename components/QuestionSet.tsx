@@ -23,9 +23,10 @@ const sampleQuestions: Question[] = [
 
 interface QuestionSetProps {
   onComplete: () => void;
+  onBack: () => void; // Added onBack to the interface
 }
 
-const QuestionSet: React.FC<QuestionSetProps> = ({ onComplete }) => {
+const QuestionSet: React.FC<QuestionSetProps> = ({ onComplete, onBack }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { addCurrency } = useGame();
 
@@ -43,13 +44,25 @@ const QuestionSet: React.FC<QuestionSetProps> = ({ onComplete }) => {
   };
 
   return (
-    <div>
-      <h3>Question {currentIndex + 1} of {sampleQuestions.length}</h3>
-      <p>{currentQuestion.question}</p>
-      <ul>
+    <div className="max-w-md w-full p-6 bg-white/80 backdrop-blur rounded-lg shadow-lg">
+      <div className="flex justify-between mb-4">
+        <button onClick={onBack} className="text-blue-500 hover:underline">
+          &larr; Back to Spaceship
+        </button>
+        <span>
+          Question {currentIndex + 1} of {sampleQuestions.length}
+        </span>
+      </div>
+      <p className="mb-4">{currentQuestion.question}</p>
+      <ul className="space-y-2">
         {currentQuestion.options.map((option, index) => (
           <li key={index}>
-            <button onClick={() => handleAnswer(index)}>{option}</button>
+            <button
+              onClick={() => handleAnswer(index)}
+              className="w-full text-left px-4 py-2 bg-blue-100 rounded hover:bg-blue-200"
+            >
+              {option}
+            </button>
           </li>
         ))}
       </ul>
