@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGame } from '../context/GameContext';
 import { GoogleGenAI } from "@google/genai";
+import Image from 'next/image';
 
 const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_SECRET_KEY });
 
-
-interface Question {
+export interface Question {
   question: string;
   options: string[];
   answer: number;
+}
+
+interface QuestionSetProps {
+  onComplete: () => void;
+  onBack: () => void;
+  onQuestionChange: (question: Question) => void;
 }
 
 const questionSets: { [key: number]: { category: string; questions: Question[] } } = {
@@ -280,7 +286,7 @@ const planetThemes = [
   { box: "bg-blue-900/80", text: "text-white" },       // Neptune (dark blue)
 ];
 
-const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = ({ onComplete, onBack }) => {
+const QuestionSet: React.FC<QuestionSetProps> = ({ onComplete, onBack, onQuestionChange }) => {
   const { addCurrency, selectedPlanet } = useGame();
   const currentSet = questionSets[selectedPlanet] || questionSets[0];
   const category = currentSet.category;
@@ -291,12 +297,13 @@ const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = (
   const [feedback, setFeedback] = useState<{ index: number; isCorrect: boolean } | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const [disableOptions, setDisableOptions] = useState(false);
-  
 
   const currentQuestion = questions[currentIndex];
 
-  const [encouragementTest, setEncourage] = useState<string | null>(null); // Explicitly initialize with null
-
+  // Inform parent of current question change
+  useEffect(() => {
+    onQuestionChange(currentQuestion);
+  }, [currentQuestion, onQuestionChange]);
 
   const handleAnswer = (optionIndex: number) => {
     if (disableOptions) return;
@@ -318,37 +325,46 @@ const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = (
     } else {
       setFeedback({ index: optionIndex, isCorrect: false });
       setDisableOptions(true);
-      // Call the encouragement
-      //setFeedbackMessage("well....");
       encouragementText();
-      //setFeedbackMessage('${encouragementTest}');
-      
       setTimeout(() => {
         setFeedback(null);
         setFeedbackMessage(null);
         setDisableOptions(false);
-      }, 6500); 
+      }, 6500);
     }
   };
 
   const encouragementText = async () => {
-    var prompt = `Pretend I am a young kid who just answered a question incorrectly. Give me words of encouragement with a positive joking try again vibe. Make it only one line. If you can, make it astronomy themed`; // Construct the prompt
+    const prompt = `Pretend I am a young kid who just answered a question incorrectly. Give me words of encouragement with a positive, joking, try-again vibe. Make it only one line and, if possible, make it astronomy themed.`;
     try {
       const response = await ai.models.generateContent({
         model: "gemini-2.0-flash",
         contents: prompt,
       });
       if (response) {
-        //setEncourage(response.text ?? null); // Use null if response.text is undefined
-        setFeedbackMessage("huh");
         setFeedbackMessage(response.text ?? null);
       }
-      
-
     } catch (error) {
       console.error("Error fetching response from Gemini:", error);
     }
-   
+  };
+
+  const getHint = async () => {
+    const prompt = `Pretend I am a young kid who needs a small hint to answer the question: ${currentQuestion.question}. Give me a hint without revealing the answer. Hint: ${currentQuestion.options[currentQuestion.answer]}`;
+    try {
+      const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: prompt,
+      });
+      if (response) {
+        setFeedbackMessage(response.text ?? null);
+        setTimeout(() => {
+          setFeedbackMessage(null);
+        }, 6500);
+      }
+    } catch (error) {
+      console.error("Error fetching response from Gemini:", error);
+    }
   };
 
   return (
@@ -384,7 +400,21 @@ const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = (
           );
         })}
       </ul>
-      {feedbackMessage && <div className="mt-4 text-center font-bold">{feedbackMessage}</div>}
+      {/* Hint Button below options, centered */}
+      <div className="mt-4 flex justify-center">
+        <button 
+          onClick={getHint} 
+          className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+        >
+          Get Hint
+        </button>
+      </div>
+      {/* Display hint or feedback message */}
+      {feedbackMessage && (
+        <div className="mt-4 text-center font-bold">
+          {feedbackMessage}
+        </div>
+      )}
     </div>
   );
 };
