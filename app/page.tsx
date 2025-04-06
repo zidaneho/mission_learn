@@ -53,8 +53,25 @@ export default function Home() {
     <GameProvider>
       <div
         className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] relative bg-center"
-        style={{ backgroundImage: `url(${starsBackground})` }}
+
+        style={{ 
+          backgroundImage: `url(${starsBackground})`,
+          overflow:"hidden" 
+        }}
       >
+        <Image
+          src="/Moon.png"
+          alt="Moon"
+          width={2000}
+          height={2000}
+          className="absolute z-10 pointer-events-none"
+          style={{
+            bottom: "-900px", // moves it 100px *below* the screen
+            left: "50%",       // center it horizontally
+            transform: "translateX(-50%)",
+            imageRendering: "pixelated"
+          }}
+        />
         {/* Game Header */}
         <header className="w-full flex flex-col items-center mb-8">
           <h1 className="text-3xl font-bold">Elementary Space Adventure</h1>
@@ -75,7 +92,8 @@ export default function Home() {
 
         {/* Currency Display: Only show on home screen */}
         {!inQuestionMode && (
-          <div className="fixed bottom-16 left-10">
+
+          <div className="fixed bottom-25 left-10">
             <CurrencyDisplay />
           </div>
         )}
