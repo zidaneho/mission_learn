@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState,useRef } from "react";
 import { GameProvider, useGame } from "../context/GameContext";
 import PlanetSelector from "../components/PlanetSelector";
 import QuestionSet, { Question } from "../components/QuestionSet";
@@ -25,6 +25,7 @@ export default function Home() {
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [hintText, setHint] = useState<string | null>(null);
   const starsBackground = "/stars_background.png";
+  const foregroundRef = useRef<HTMLDivElement>(null);
 
   // Called when the QuestionSet changes the current question
   const handleQuestionChange = (question: Question) => {
@@ -52,27 +53,41 @@ export default function Home() {
         className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] relative bg-center"
         style={{ 
           backgroundImage: `url(${starsBackground})`,
-          overflow: "hidden"
+          overflow: "hidden",
+          width:'100%'
+          
         }}
       >
         {/* Moon image: in front of background but behind content */}
-        <Image
-          src="/moon-slice.png"
-          alt="Moon"
-          width={250}
-          height={0}
+        <div
+          ref={foregroundRef}
           style={{
             position: "absolute",
-            zIndex: 0,
-            pointerEvents: "none",
+            bottom: 0,
+            left: 0,
             width: "100%",
-            height: "auto", // or any custom height
-            bottom: "0%",
-            left:"0%",
-            imageRendering: "pixelated",
-            //objectFit: "cover" // optional
+            height: "auto",
+            zIndex: 1, // lower than game content
+            pointerEvents: "none",
           }}
-        />
+        >
+          <Image
+            src="/moon-slice.png"
+            alt="Moon"
+            width={250}
+            height={0}
+            style={{
+              pointerEvents: "none",
+              width: "100%",
+              height: "auto",
+              imageRendering: "pixelated",
+              position: "relative", // ensure it stays within this container
+              zIndex: 0,
+              bottom:"0%"
+            }}
+          />
+          {!inQuestionMode && <ItemPlacements containerRef={foregroundRef} />}
+        </div>
 
         {/* Wrapper for content with higher z-index */}
         <div className="relative z-10">
@@ -114,10 +129,11 @@ export default function Home() {
           {/* Shop Modal */}
           {showShop && <Shop onClose={() => setShowShop(false)} />}
 
-          {/* Item Placements: Only show when not in question mode */}
-          {!inQuestionMode && <ItemPlacements />}
+          
         </div>
+        
       </div>
+     
     </GameProvider>
   );
 }
