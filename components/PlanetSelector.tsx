@@ -52,7 +52,6 @@ const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
   const [planetFact, setFact] = useState<string | null>(null); // Explicitly initialize with null
-  const [encouragementTest, setEncourage] = useState<string | null>(null); // Explicitly initialize with null
 
   const handleLeft = () => {
     setLeftClicked(true);
@@ -69,7 +68,7 @@ const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
 
   const planetFunFact = async () => {
     var selectedPlanetName = planets[selectedPlanet]; // Get the name of the selected planet
-    var prompt = `Give me a ${selectedPlanetName} fact in 30 words or less. Make it worded for a singular young kid. Act like you're the planet Pluto. Make it random if you introduce yourself or not`; // Construct the prompt
+    var prompt = `Give me a ${selectedPlanetName} fact in 30 words or less. Make it worded for a singular young kid. Act like you're a friendly face working at mission control talking to a student on a tour of mission control for the first time. Be creative with your sentence starters. You and the kid are looking at a monitor with a picture of the planet.`; // Construct the prompt
     try {
       const response = await ai.models.generateContent({
         model: "gemini-2.0-flash",
@@ -86,24 +85,7 @@ const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
    
   };
 
-  const encouragementText = async () => {
-    var selectedPlanetName = planets[selectedPlanet]; // Get the name of the selected planet
-    var prompt = `Pretend I am a young kid who just answered a question incorrectly. Give me words of encouragement with a positive joking try again vibe. Make it only one line. If you can, make it astronomy themed`; // Construct the prompt
-    try {
-      const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
-        contents: prompt,
-      });
-      if (response) {
-        setEncourage(response.text ?? null); // Use null if response.text is undefined
-      }
-      
 
-    } catch (error) {
-      console.error("Error fetching response from Gemini:", error);
-    }
-   
-  };
 
   return (
     <div className="flex flex-col items-center">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useGame } from '../context/GameContext';
 import { GoogleGenAI } from "@google/genai";
+import Image from 'next/image';
 
 const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_SECRET_KEY });
 
@@ -280,6 +281,12 @@ const planetThemes = [
   { box: "bg-blue-900/80", text: "text-white" },       // Neptune (dark blue)
 ];
 
+interface QuestionSetProps {
+  onComplete: () => void;
+  onBack: () => void;
+  onQuestionChange: (question: Question) => void; // Add this prop
+}
+
 const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = ({ onComplete, onBack }) => {
   const { addCurrency, selectedPlanet } = useGame();
   const currentSet = questionSets[selectedPlanet] || questionSets[0];
@@ -297,6 +304,8 @@ const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = (
 
   const [encouragementTest, setEncourage] = useState<string | null>(null); // Explicitly initialize with null
 
+[currentQuestion, onQuestionChange]);
+  
 
   const handleAnswer = (optionIndex: number) => {
     if (disableOptions) return;
@@ -351,7 +360,28 @@ const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = (
    
   };
 
+  const getHint = async () => {
+    var prompt = `Pretend I am a young kid who needs a small hint to answer the question ` + currentQuestion.question + 'give this kid a hint to answer. Do not include the correct answer text in the hint. Make sure the hint is relevant to the context of the question and answer. ' + currentQuestion.options[currentQuestion.answer]; // Construct the prompt
+    try {
+      const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: prompt,
+      });
+      if (response) {
+        //setEncourage(response.text ?? null); // Use null if response.text is undefined
+        setFeedbackMessage("huh");
+        setFeedbackMessage(response.text ?? null);
+      }
+      
+
+    } catch (error) {
+      console.error("Error fetching response from Gemini:", error);
+    }
+   
+  };
+
   return (
+    <div>
     <div className={`max-w-md w-full p-6 ${theme.box} backdrop-blur rounded-lg shadow-lg`}>
       <div className="mb-4">
         <div className="flex justify-between items-center">
@@ -385,8 +415,16 @@ const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = (
         })}
       </ul>
       {feedbackMessage && <div className="mt-4 text-center font-bold">{feedbackMessage}</div>}
+
     </div>
+
+
+
+</div>
+    
   );
+
+
 };
 
 export default QuestionSet;
