@@ -11,7 +11,8 @@ import SaturnImage from './PlanetImages/Saturn.png';
 import UranusImage from './PlanetImages/Uranus.png';
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: "" });
+
+const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_SECRET_KEY });
 
 const planets = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'];
 
