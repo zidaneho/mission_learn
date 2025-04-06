@@ -9,6 +9,10 @@ import VenusImage from './PlanetImages/Venus.png';
 import JupiterImage from './PlanetImages/Jupiter.png';
 import SaturnImage from './PlanetImages/Saturn.png';
 import UranusImage from './PlanetImages/Uranus.png';
+import { GoogleGenAI } from "@google/genai";
+
+
+const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_SECRET_KEY });
 
 const planets = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'];
 
@@ -38,10 +42,17 @@ function Profile() {
   }
 }
 
+
+
+const AskPrompt: React.FC = () => {
+  return <div>askPrompt()</div>;
+};
 const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
   const { selectedPlanet, setSelectedPlanet } = useGame();
   const [leftClicked, setLeftClicked] = useState(false);
   const [rightClicked, setRightClicked] = useState(false);
+  const [planetFact, setFact] = useState<string | null>(null); // Explicitly initialize with null
+  const [encouragementTest, setEncourage] = useState<string | null>(null); // Explicitly initialize with null
 
   const handleLeft = () => {
     setLeftClicked(true);
@@ -53,6 +64,45 @@ const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
     setRightClicked(true);
     setTimeout(() => setRightClicked(false), 1000);
     setSelectedPlanet((selectedPlanet + 1) % planets.length);
+    console.log("Selected Planet: ", selectedPlanet);
+  };
+
+  const planetFunFact = async () => {
+    var selectedPlanetName = planets[selectedPlanet]; // Get the name of the selected planet
+    var prompt = `Give me a ${selectedPlanetName} fact in 30 words or less. Make it worded for a young kid. Act like you're the planet Pluto`; // Construct the prompt
+    try {
+      const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: prompt,
+      });
+      if (response) {
+        setFact(response.text ?? null); // Use null if response.text is undefined
+      }
+      
+
+    } catch (error) {
+      console.error("Error fetching response from Gemini:", error);
+    }
+   
+  };
+
+  const encouragementText = async () => {
+    var selectedPlanetName = planets[selectedPlanet]; // Get the name of the selected planet
+    var prompt = `Pretend I am a young kid who just answered a question incorrectly. Give me words of encouragement with a positive joking try again vibe. Make it only one line. If you can, make it astronomy themed`; // Construct the prompt
+    try {
+      const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: prompt,
+      });
+      if (response) {
+        setEncourage(response.text ?? null); // Use null if response.text is undefined
+      }
+      
+
+    } catch (error) {
+      console.error("Error fetching response from Gemini:", error);
+    }
+   
   };
 
   return (
@@ -87,16 +137,27 @@ const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
             className="cursor-pointer transition-transform duration-300 hover:scale-110"
           />
         </div>
+
       </div>
 
       {/* Planet Name */}
       <span style={{ marginTop: '20px' }}>{planets[selectedPlanet]}</span>
 
       {/* Select Button */}
-      <button onClick={onSelect} style={{ marginTop: '20px' }}>
+      <button
+        onClick={onSelect}
+        className="mt-4 px-4 py-2 rounded border border-teal-600 text-teal-600 hover:border-teal-500 hover:text-teal-500 hover:scale-105 hover:shadow-lg hover:shadow-teal-500 transition-all"
+      >
         Select Planet
       </button>
+
+        <button onClick={planetFunFact}>Planet Fun fact</button>
+        {planetFact && <p>Fun fact: {planetFact}</p>}
+        <button onClick={encouragementText}>Words of encouragement</button>
+        {encouragementTest && <p>Encourage: {encouragementTest}</p>}
     </div>
+
+    
   );
 };
 
