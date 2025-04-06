@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GameProvider, useGame } from "../context/GameContext";
+import { GameProvider } from "../context/GameContext";
 import PlanetSelector from "../components/PlanetSelector";
 import QuestionSet from "../components/QuestionSet";
 import Shop from "../components/Shop";
@@ -51,18 +51,21 @@ export default function Home() {
           )}
         </main>
 
-        {/* Shop Button */}
-        <button
-          onClick={() => setShowShop(true)}
-          className="fixed bottom-10 left-10 bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Shop
-        </button>
+        {/* Shop Button: Only show on home screen */}
+        {!inQuestionMode && (
+          <button
+            onClick={() => setShowShop(true)}
+            className="fixed bottom-10 left-10 bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Shop
+          </button>
+        )}
 
         {/* Shop Modal */}
         {showShop && <Shop onClose={() => setShowShop(false)} />}
-        {/* Item Placements */}
-        <ItemPlacements />
+
+        {/* Item Placements: Only show when not in question mode */}
+        {!inQuestionMode && <ItemPlacements />}
       </div>
     </GameProvider>
   );
