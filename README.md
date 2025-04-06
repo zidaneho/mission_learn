@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lunar Learning
+
+**Lunar Learning** is an interactive, space-themed science game designed specifically to engage elementary school students with learning disabilities. By transforming traditional science lessons into exciting missions, Lunar Learning turns learning into an adventure where kids become astronauts exploring the solar system, solving problems, and earning rewards.
+
+## Pitch
+
+### Hook / Problem
+What if school felt like a frustrating puzzle you were never meant to solve? Many younger students with learning disabilities feel confused, discouraged, and disengaged by traditional classrooms. Standard teaching methods often fail to capture their attention or adapt to their unique needs.
+
+### Our Solution
+Lunar Learning transforms elementary science into a space adventure. Students launch their learning journey from their customizable Moon base and navigate the solar system by visiting planets in any order. Each planet is themed around a different science topic—turning lessons on plants and animals, solids, liquids, and gases, or rocks and minerals into interactive missions.  
+- **Engaging Gameplay:** Navigate through planets with intuitive left/right controls.
+- **Interactive Question Sets:** Each planet challenges students with custom, fun questions.
+- **Reward System:** Earn coins for correct answers to personalize your Moon base with unlockable space-themed items.
+- **Adaptive Support:** Integrated Gemini AI provides real-time fun facts, hints, and encouraging messages.
+- **Achievement Recognition:** Plant a flag on each planet upon completing its challenges, celebrating every success.
+
+## Features
+
+- **Spaceship Control Center:**  
+  Navigate the solar system using an interactive control panel. Choose which planet to explore next and see a flag appear on completed planets.
+
+- **Planet-Specific Challenges:**  
+  Each planet features a different science topic with custom questions. For example:
+  - **Mercury (Anatomy):** Learn about your body’s senses and organs.
+  - **Venus (Scientific Thinking):** Practice the scientific method and critical thinking.
+  - **Earth (Plants and Animals):** Discover how plants and animals live and interact.
+  - **Mars (Rocks and Minerals):** Explore the world of rocks and minerals.
+  - **Jupiter (Natural Disasters):** Understand natural disasters.
+  - **Saturn (Space and the Solar):** Learn about the solar system.
+  - **Uranus (Water Cycle and Weather):** Delve into weather and the water cycle.
+  - **Neptune (Solids, Liquids, Gas):** Explore the states of matter.
+
+- **Reward & Customization System:**  
+  Earn coins for each correct answer and use them to purchase space-themed decorations for your Moon base.
+
+- **Adaptive Hints & Encouragement:**  
+  Gemini AI generates fun facts, hints, and positive prompts to support and motivate learners.
+
+- **Accessibility Focus:**  
+  Designed for neurodiverse learners with clear visuals, self-paced gameplay, and adaptive support.
+
+## Tech Stack
+
+- **Next.js:** A modern framework for server-rendered React applications.
+- **React:** For building reusable UI components.
+- **Tailwind CSS:** For rapid, responsive styling.
+- **Gemini AI:** To generate real-time hints, fun facts, and encouraging messages.
+- **Local Storage:** For progress persistence, including tracking completed planets and user customization.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Node.js** (version 14 or later)
+- **npm** or **yarn**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/yourusername/lunar-learning.git
+   cd lunar-learning
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Install Dependencies:**
+   ```bash
+   npm install
+   # or
+   yarn install
 
-## Learn More
+3. **Set Environment Variables:**
+   Create a .env.local file in the project root and add your Gemini API key:
+   ```bash
+   NEXT_PUBLIC_SECRET_KEY=your_gemini_api_key_here
 
-To learn more about Next.js, take a look at the following resources:
+4. **Running the Project:**
+   Start the development server:
+   ```bash
+   npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open http://localhost:3000 in your browser to see Lunar Learning in action.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
+Our contributors:
+- **Uday**
+- **Bee**
+- **Zidane**
+- **Syd**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Feel free to fork the repository, make improvements, and submit a pull request. We welcome your feedback and contributions!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Impact & Future Vision
+
+Lunar Learning aims to make science education engaging and accessible for every student—especially those facing learning challenges. In the future, we plan to:
+- Expand to additional subjects.
+- Introduce multiplayer cooperative missions.
+- Collaborate with educators to bring Lunar Learning into classrooms.
+
+Every child deserves to feel smart, capable, and curious. Lunar Learning is our way of making learning an adventure.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+Happy coding, and blast off into learning!
