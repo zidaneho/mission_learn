@@ -52,21 +52,19 @@ const ItemPlacements: React.FC<ItemPlacementsProps> = ({ containerRef }) => {
         const item = shopItems.find((i) => i.name === itemName);
         if (!item) return null;
 
-        // Calculate left and top positions based on container dimensions.
-        const left = item.x * dimensions.width;
-        const top = item.y * dimensions.height;
+        const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
+        const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
 
         return (
           <div
             key={item.id}
             style={{
-              position: "absolute",
-              left: left,
-              top: top,
-              transform: `translate(-50%, -50%) scale(${item.scale ?? 1})`,
-              transformOrigin: "center center",
-              pointerEvents: "none",
-              textAlign: "center",
+              position: 'absolute',
+              left: `${item.x * screenWidth}px`,
+              top: `${item.y * screenHeight}px`,
+              transform: 'translate(-50%, -50%)',
+              pointerEvents: 'none',
+              textAlign: 'center',
             }}
           >
             <Image
