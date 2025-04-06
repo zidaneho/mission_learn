@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { GameProvider, useGame } from "../context/GameContext";
 import PlanetSelector from "../components/PlanetSelector";
 import QuestionSet, { Question } from "../components/QuestionSet";
@@ -20,13 +20,13 @@ function CurrencyDisplay() {
 }
 
 function HomeContent() {
-  // Using context values and our own state.
   const { selectedPlanet, markPlanetCompleted } = useGame();
   const [showShop, setShowShop] = useState(false);
   const [inQuestionMode, setInQuestionMode] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [hintText, setHint] = useState<string | null>(null);
   const starsBackground = "/stars_background.png";
+  const foregroundRef = useRef<HTMLDivElement>(null);
 
   // Update current question (and clear any previous hint)
   const handleQuestionChange = (question: Question) => {
@@ -39,8 +39,7 @@ function HomeContent() {
   };
 
   const handleQuestionsComplete = () => {
-    // When all questions for the current planet are answered correctly,
-    // mark this planet as completed.
+    // When all questions for the current planet are answered correctly, mark it as completed.
     markPlanetCompleted(selectedPlanet);
     setInQuestionMode(false);
     setHint(null);
@@ -57,27 +56,42 @@ function HomeContent() {
       style={{
         backgroundImage: `url(${starsBackground})`,
         overflow: "hidden",
+        width: "100%",
       }}
     >
-      {/* Moon-slice image: in front of background but behind content */}
-      <Image
-        src="/moon-slice.png"
-        alt="Moon"
-        width={250}
-        height={0}
+      {/* Foreground container for moon-slice image */}
+      <div
+        ref={foregroundRef}
         style={{
           position: "absolute",
-          zIndex: 0,
-          pointerEvents: "none",
+          bottom: 0,
+          left: 0,
           width: "100%",
           height: "auto",
-          bottom: "0%",
-          left: "0%",
-          imageRendering: "pixelated",
+          zIndex: 1, // lower than game content
+          pointerEvents: "none",
         }}
-      />
+      >
+        <Image
+          src="/moon-slice.png"
+          alt="Moon"
+          width={250}
+          height={0}
+          style={{
+            pointerEvents: "none",
+            width: "100%",
+            height: "auto",
+            imageRendering: "pixelated",
+            position: "relative",
+            zIndex: 0,
+            bottom: "0%",
+          }}
+        />
+        {/* Render ItemPlacements inside this container if desired */}
+        {!inQuestionMode && <ItemPlacements containerRef={foregroundRef} />}
+      </div>
 
-      {/* Wrapper for content with higher z-index */}
+      {/* Wrapper for all interactive content with higher z-index */}
       <div className="relative z-10">
         {/* Game Header */}
         <header className="w-full flex flex-col items-center mb-8">
@@ -116,9 +130,6 @@ function HomeContent() {
 
         {/* Shop Modal */}
         {showShop && <Shop onClose={() => setShowShop(false)} />}
-
-        {/* Item Placements (only on home screen) */}
-        {!inQuestionMode && <ItemPlacements />}
       </div>
     </div>
   );
