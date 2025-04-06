@@ -281,12 +281,6 @@ const planetThemes = [
   { box: "bg-blue-900/80", text: "text-white" },       // Neptune (dark blue)
 ];
 
-interface QuestionSetProps {
-  onComplete: () => void;
-  onBack: () => void;
-  onQuestionChange: (question: Question) => void; // Add this prop
-}
-
 const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = ({ onComplete, onBack }) => {
   const { addCurrency, selectedPlanet } = useGame();
   const currentSet = questionSets[selectedPlanet] || questionSets[0];
@@ -304,8 +298,6 @@ const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = (
 
   const [encouragementTest, setEncourage] = useState<string | null>(null); // Explicitly initialize with null
 
-[currentQuestion, onQuestionChange]);
-  
 
   const handleAnswer = (optionIndex: number) => {
     if (disableOptions) return;
@@ -392,6 +384,14 @@ const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = (
             Question {currentIndex + 1} of {questions.length}
           </span>
         </div>
+        <Image
+            src="/right_arrow.png" // Place right_arrow.png in public folder
+            alt="Right Arrow"
+            width={50}
+            height={50}
+            onClick={getHint}
+            className="cursor-pointer transition-transform duration-300 hover:scale-110"
+          />
         <div className="mt-4 text-center font-bold text-black text-2xl">
           Category: {category}
         </div>
@@ -415,6 +415,7 @@ const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = (
         })}
       </ul>
       {feedbackMessage && <div className="mt-4 text-center font-bold">{feedbackMessage}</div>}
+
 
     </div>
 
