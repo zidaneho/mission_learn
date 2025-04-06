@@ -90,7 +90,7 @@ const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <h2>Spaceship Control Center</h2>
+      <h2 className="text-2xl font-bold">Spaceship Control Center</h2>
       <div className="relative flex items-center justify-center mt-4">
         <div className="absolute left-[-80px]">
           <Image
@@ -114,7 +114,8 @@ const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
           />
         </div>
       </div>
-      <span style={{ marginTop: '20px' }}>{planets[selectedPlanet]}</span>
+      <span style={{ marginTop: '20px', fontSize: '1.5rem' }}>{planets[selectedPlanet]}</span>
+
       <button
         onClick={onSelect}
         className="mt-4 px-4 py-2 rounded border border-teal-600 text-teal-600 hover:border-teal-500 hover:text-teal-500 hover:scale-105 hover:shadow-lg hover:shadow-teal-500 transition-all"
