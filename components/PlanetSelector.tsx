@@ -50,8 +50,8 @@ function Profile() {
       return (
         <Image
           src={MarsImage}          
-          width={200}
-          height={200}
+          width={225}
+          height={225}
           alt="Mars"
         />
       );
@@ -59,8 +59,8 @@ function Profile() {
       return (
         <Image
           src={JupiterImage}          
-          width={200}
-          height={200}
+          width={250}
+          height={250}
           alt="Jupiter"
         />
       );

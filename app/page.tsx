@@ -8,9 +8,12 @@ import Shop from "../components/Shop";
 import {shopItems, ShopItem} from "../components/ShopItems";
 import ItemPlacements from "../components/ItemPlacements";
 
+
+
 export default function Home() {
   const [showShop, setShowShop] = useState(false);
   const [inQuestionMode, setInQuestionMode] = useState(false);
+  const starsBackground = "/stars_background.png";
 
   const handlePlanetSelect = () => {
     // Start the question mode when a planet is selected
@@ -29,7 +32,8 @@ export default function Home() {
   
   return (
     <GameProvider>
-      <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] relative">
+      <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] relative bg-center"
+      style={{backgroundImage: `url(${starsBackground})`}}>
         {/* Game Header */}
         <header className="w-full flex flex-col items-center mb-8">
           <h1 className="text-3xl font-bold">Elementary Space Adventure</h1>
