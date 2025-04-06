@@ -57,16 +57,20 @@ export default function Home() {
       >
         {/* Moon image: in front of background but behind content */}
         <Image
-          src="/Moon.png"
+          src="/moon-slice.png"
           alt="Moon"
-          width={2000}
-          height={2000}
-          className="absolute z-0 pointer-events-none"
+          width={250}
+          height={0}
           style={{
-            bottom: "-900px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            imageRendering: "pixelated"
+            position: "absolute",
+            zIndex: 0,
+            pointerEvents: "none",
+            width: "100%",
+            height: "auto", // or any custom height
+            bottom: "0%",
+            left:"0%",
+            imageRendering: "pixelated",
+            //objectFit: "cover" // optional
           }}
         />
 
