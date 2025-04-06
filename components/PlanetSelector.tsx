@@ -69,7 +69,7 @@ const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
 
   const planetFunFact = async () => {
     var selectedPlanetName = planets[selectedPlanet]; // Get the name of the selected planet
-    var prompt = `Give me a ${selectedPlanetName} fact in 30 words or less. Make it worded for a singular young kid. Act like you're the planet Pluto. Make it random if you introduce yourself or not`; // Construct the prompt
+    var prompt = `Give me a ${selectedPlanetName} fact in 30 words or less. Make it worded for a young kid. Act like you're the planet Pluto`; // Construct the prompt
     try {
       const response = await ai.models.generateContent({
         model: "gemini-2.0-flash",
@@ -144,7 +144,10 @@ const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
       <span style={{ marginTop: '20px' }}>{planets[selectedPlanet]}</span>
 
       {/* Select Button */}
-      <button onClick={onSelect} style={{ marginTop: '20px' }}>
+      <button
+        onClick={onSelect}
+        className="mt-4 px-4 py-2 rounded border border-teal-600 text-teal-600 hover:border-teal-500 hover:text-teal-500 hover:scale-105 hover:shadow-lg hover:shadow-teal-500 transition-all"
+      >
         Select Planet
       </button>
 
