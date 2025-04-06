@@ -7,7 +7,7 @@ import { GoogleGenAI } from "@google/genai";
 import Image from "next/image";
 
 interface ItemPlacementsProps {
-  containerRef: RefObject<HTMLDivElement>;
+  containerRef: RefObject<HTMLDivElement | null>;
 }
 
 const ItemPlacements: React.FC<ItemPlacementsProps> = ({ containerRef }) => {
