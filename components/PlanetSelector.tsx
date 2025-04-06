@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
 import { useGame } from '../context/GameContext';
 import Image from 'next/image';
-import NeptuneImage from './PlanetImages/Neptune.png';
-import EarthImage from './PlanetImages/Earth.png';
-import MarsImage from './PlanetImages/Mars.png';
-import MercuryImage from './PlanetImages/Mercury.png';
-import VenusImage from './PlanetImages/Venus.png';
-import JupiterImage from './PlanetImages/Jupiter.png';
-import SaturnImage from './PlanetImages/Saturn.png';
-import UranusImage from './PlanetImages/Uranus.png';
 import { GoogleGenAI } from "@google/genai";
 
 
@@ -20,23 +12,33 @@ function Profile() {
 
   const { selectedPlanet } = useGame();
 
+  var additionalString = ''; // Change this to "Flag" if the planet is completed
+
   switch (selectedPlanet) {
     case 0:
-      return <Image src={MercuryImage} width={200} height={200} alt="Mercury" />;
+      var imageName = '/Mercury' + additionalString + '.png'; // Set the image name for Mercury
+      return <Image src={imageName} width={200} height={200} alt="Mercury" />;
     case 1:
-      return <Image src={VenusImage} width={200} height={200} alt="Venus" />;
+      var imageName = '/Venus' + additionalString + '.png'; // Set the image name for Mercury
+      return <Image src={imageName} width={200} height={200} alt="Venus" />;
     case 2:
-      return <Image src={EarthImage} width={200} height={200} alt="Earth" />;
+      var imageName = '/Earth' + additionalString + '.png'; // Set the image name for Mercury
+      return <Image src={imageName} width={200} height={200} alt="Earth" />;
     case 3:
-      return <Image src={MarsImage} width={200} height={200} alt="Mars" />;
+      var imageName = '/Mars' + additionalString + '.png'; // Set the image name for Mercury
+      return <Image src={imageName} width={200} height={200} alt="Mars" />;
     case 4:
-      return <Image src={JupiterImage} width={200} height={200} alt="Jupiter" />;
+      var imageName = '/Jupiter' + additionalString + '.png'; // Set the image name for Mercury
+      return <Image src={imageName} width={200} height={200} alt="Jupiter" />;
     case 5:
-      return <Image src={SaturnImage} width={200} height={200} alt="Saturn" />;
+      var imageName = '/Saturn' + additionalString + '.png'; // Set the image name for Mercury
+      return <Image src={imageName} width={200} height={200} alt="Saturn" />;
     case 6:
-      return <Image src={UranusImage} width={200} height={200} alt="Uranus" />;
+      var imageName = '/Uranus' + additionalString + '.png'; // Set the image name for Mercury
+      return <Image src={imageName} width={200} height={200} alt="Uranus" />;
     case 7:
-      return <Image src={NeptuneImage} width={200} height={200} alt="Neptune" />;
+      var imageName = '/Neptune' + additionalString + '.png'; // Set the image name for Mercury
+      return <Image src={imageName} width={200} height={200} alt="Neptune" />;
     default:
       return null;
   }
