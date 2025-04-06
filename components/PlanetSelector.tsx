@@ -136,7 +136,7 @@ const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
 
       <div style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)' }}>
           <Image
-            src="/right_arrow.png" // Place right_arrow.png in public folder
+            src="/AstronautFigure.png" // Place right_arrow.png in public folder
             alt="Right Arrow"
             width={50}
             height={50}
