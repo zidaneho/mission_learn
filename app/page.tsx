@@ -26,25 +26,22 @@ export default function Home() {
   const [hintText, setHint] = useState<string | null>(null);
   const starsBackground = "/stars_background.png";
 
-  // This function is called from QuestionSet when the current question changes.
+  // Called when the QuestionSet changes the current question
   const handleQuestionChange = (question: Question) => {
     setCurrentQuestion(question);
     setHint(null); // Clear any previous hint
   };
 
   const handlePlanetSelect = () => {
-    // Start the question mode when a planet is selected
     setInQuestionMode(true);
   };
 
   const handleQuestionsComplete = () => {
-    // Return to the spaceship view after questions are finished
     setInQuestionMode(false);
     setHint(null);
   };
 
   const handleBackToSpaceship = () => {
-    // Back button action from the planet's question view
     setInQuestionMode(false);
     setHint(null);
   };
@@ -53,66 +50,69 @@ export default function Home() {
     <GameProvider>
       <div
         className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] relative bg-center"
-
         style={{ 
           backgroundImage: `url(${starsBackground})`,
-          overflow:"hidden" 
+          overflow: "hidden"
         }}
       >
+        {/* Moon image: in front of background but behind content */}
         <Image
           src="/Moon.png"
           alt="Moon"
           width={2000}
           height={2000}
-          className="absolute z-10 pointer-events-none"
+          className="absolute z-0 pointer-events-none"
           style={{
-            bottom: "-900px", // moves it 100px *below* the screen
-            left: "50%",       // center it horizontally
+            bottom: "-900px",
+            left: "50%",
             transform: "translateX(-50%)",
             imageRendering: "pixelated"
           }}
         />
-        {/* Game Header */}
-        <header className="w-full flex flex-col items-center mb-8">
-          <h1 className="text-3xl font-bold">Elementary Space Adventure</h1>
-        </header>
 
-        {/* Game Main Content */}
-        <main className="flex flex-col items-center gap-8">
-          {inQuestionMode ? (
-            <QuestionSet 
-              onComplete={handleQuestionsComplete} 
-              onBack={handleBackToSpaceship}
-              onQuestionChange={handleQuestionChange}
-            />
-          ) : (
-            <PlanetSelector onSelect={handlePlanetSelect} />
+        {/* Wrapper for content with higher z-index */}
+        <div className="relative z-10">
+          {/* Game Header */}
+          <header className="w-full flex flex-col items-center mb-8">
+            <h1 className="text-3xl font-bold">Elementary Space Adventure</h1>
+          </header>
+
+          {/* Game Main Content */}
+          <main className="flex flex-col items-center gap-8">
+            {inQuestionMode ? (
+              <QuestionSet 
+                onComplete={handleQuestionsComplete} 
+                onBack={handleBackToSpaceship}
+                onQuestionChange={handleQuestionChange}
+              />
+            ) : (
+              <PlanetSelector onSelect={handlePlanetSelect} />
+            )}
+          </main>
+
+          {/* Currency Display: Only show on home screen */}
+          {!inQuestionMode && (
+            <div className="fixed bottom-22 left-10">
+              <CurrencyDisplay />
+            </div>
           )}
-        </main>
 
-        {/* Currency Display: Only show on home screen */}
-        {!inQuestionMode && (
+          {/* Shop Button: Only show on home screen */}
+          {!inQuestionMode && (
+            <button
+              onClick={() => setShowShop(true)}
+              className="fixed bottom-10 left-10 bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Shop
+            </button>
+          )}
 
-          <div className="fixed bottom-25 left-10">
-            <CurrencyDisplay />
-          </div>
-        )}
+          {/* Shop Modal */}
+          {showShop && <Shop onClose={() => setShowShop(false)} />}
 
-        {/* Shop Button: Only show on home screen */}
-        {!inQuestionMode && (
-          <button
-            onClick={() => setShowShop(true)}
-            className="fixed bottom-10 left-10 bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            Shop
-          </button>
-        )}
-
-        {/* Shop Modal */}
-        {showShop && <Shop onClose={() => setShowShop(false)} />}
-
-        {/* Item Placements: Only show when not in question mode */}
-        {!inQuestionMode && <ItemPlacements />}
+          {/* Item Placements: Only show when not in question mode */}
+          {!inQuestionMode && <ItemPlacements />}
+        </div>
       </div>
     </GameProvider>
   );
