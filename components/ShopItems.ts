@@ -8,8 +8,8 @@ export interface ShopItem {
   }
 
 export const shopItems : ShopItem[] = [
-    { id: 'shield', name: 'Shield', cost: 10, x: 0.1, y: 0.3, image:'images/shield.png' },
-    { id: 'engine', name: 'Engine Boost', cost: 15, x: 0.2, y:0.3, image:'images/engine.png' },
+    { id: 'shield', name: 'Shield', cost: 10, x: 0.1, y: 0.3, image:'/AstronautFigure.png' },
+    { id: 'engine', name: 'Engine Boost', cost: 15, x: 0.2, y:0.3, image:'/AstronautFigure.png' },
     { id: 'power', name: 'Power', cost: 15,x: 0.3, y: 0.3, image:'images/power.png' },
     { id: 'plant', name: 'Plant', cost: 15,x: 0.4, y: 0.3, image:'images/plant.png' },
 
