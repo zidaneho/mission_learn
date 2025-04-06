@@ -59,33 +59,25 @@ function HomeContent() {
         overflow: "hidden",
       }}
     >
-        {/* Moon image: in front of background but behind content */}
-        <Image
-          src="/moon-slice.png"
-          alt="Moon"
-          width={250}
-          height={0}
-          style={{
-            position: "absolute",
-            zIndex: 0,
-            pointerEvents: "none",
-            width: "100%",
-            height: "auto", // or any custom height
-            bottom: "0%",
-            left:"0%",
-            imageRendering: "pixelated",
-            //objectFit: "cover" // optional
-          }}
-        />
+      {/* Moon-slice image: in front of background but behind content */}
+      <Image
+        src="/moon-slice.png"
+        alt="Moon"
+        width={250}
+        height={0}
+        style={{
+          position: "absolute",
+          zIndex: 0,
+          pointerEvents: "none",
+          width: "100%",
+          height: "auto",
+          bottom: "0%",
+          left: "0%",
+          imageRendering: "pixelated",
+        }}
+      />
 
-        {/* Wrapper for content with higher z-index */}
-        <div className="relative z-10">
-          {/* Game Header */}
-          <header className="w-full flex flex-col items-center mb-8">
-            <h1 className="text-3xl font-bold">Elementary Space Adventure</h1>
-          </header>
-
-      {/* Wrapper for main content with higher z-index */}
+      {/* Wrapper for content with higher z-index */}
       <div className="relative z-10">
         {/* Game Header */}
         <header className="w-full flex flex-col items-center mb-8">
