@@ -52,7 +52,7 @@ function HomeContent() {
 
   return (
     <div
-      className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] relative bg-center"
+      className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-space-mono)] relative bg-center"
       style={{
         backgroundImage: `url(${starsBackground})`,
         overflow: "hidden",
@@ -95,7 +95,7 @@ function HomeContent() {
       <div className="relative z-10">
         {/* Game Header */}
         <header className="w-full flex flex-col items-center mb-8">
-          <h1 className="text-3xl font-bold">Elementary Space Adventure</h1>
+          <h1 className="text-3xl font-bold">Lunar Learning</h1>
         </header>
 
         {/* Game Main Content */}
