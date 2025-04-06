@@ -113,7 +113,7 @@ function HomeContent() {
 
         {/* Currency Display (only on home screen) */}
         {!inQuestionMode && (
-          <div className="fixed bottom-16 left-10">
+          <div className="fixed bottom-22 left-10">
             <CurrencyDisplay />
           </div>
         )}
