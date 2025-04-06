@@ -1,6 +1,6 @@
 "use client";
 
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 import { GameProvider, useGame } from "../context/GameContext";
 import PlanetSelector from "../components/PlanetSelector";
 import QuestionSet, { Question } from "../components/QuestionSet";
@@ -19,7 +19,8 @@ function CurrencyDisplay() {
   );
 }
 
-export default function Home() {
+function HomeContent() {
+  const { selectedPlanet, markPlanetCompleted } = useGame();
   const [showShop, setShowShop] = useState(false);
   const [inQuestionMode, setInQuestionMode] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
@@ -27,10 +28,10 @@ export default function Home() {
   const starsBackground = "/stars_background.png";
   const foregroundRef = useRef<HTMLDivElement>(null);
 
-  // Called when the QuestionSet changes the current question
+  // Update current question (and clear any previous hint)
   const handleQuestionChange = (question: Question) => {
     setCurrentQuestion(question);
-    setHint(null); // Clear any previous hint
+    setHint(null);
   };
 
   const handlePlanetSelect = () => {
@@ -38,6 +39,8 @@ export default function Home() {
   };
 
   const handleQuestionsComplete = () => {
+    // When all questions for the current planet are answered correctly, mark it as completed.
+    markPlanetCompleted(selectedPlanet);
     setInQuestionMode(false);
     setHint(null);
   };
@@ -48,92 +51,94 @@ export default function Home() {
   };
 
   return (
-    <GameProvider>
+    <div
+      className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] relative bg-center"
+      style={{
+        backgroundImage: `url(${starsBackground})`,
+        overflow: "hidden",
+        width: "100%",
+      }}
+    >
+      {/* Foreground container for moon-slice image */}
       <div
-        className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] relative bg-center"
-        style={{ 
-          backgroundImage: `url(${starsBackground})`,
-          overflow: "hidden",
-          width:'100%'
-          
+        ref={foregroundRef}
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          width: "100%",
+          height: "auto",
+          zIndex: 1, // lower than game content
+          pointerEvents: "none",
         }}
       >
-        {/* Moon image: in front of background but behind content */}
-        <div
-          ref={foregroundRef}
+        <Image
+          src="/moon-slice.png"
+          alt="Moon"
+          width={250}
+          height={0}
           style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
+            pointerEvents: "none",
             width: "100%",
             height: "auto",
-            zIndex: 1, // lower than game content
-            pointerEvents: "none",
+            imageRendering: "pixelated",
+            position: "relative",
+            zIndex: 0,
+            bottom: "0%",
           }}
-        >
-          <Image
-            src="/moon-slice.png"
-            alt="Moon"
-            width={250}
-            height={0}
-            style={{
-              pointerEvents: "none",
-              width: "100%",
-              height: "auto",
-              imageRendering: "pixelated",
-              position: "relative", // ensure it stays within this container
-              zIndex: 0,
-              bottom:"0%"
-            }}
-          />
-          {!inQuestionMode && <ItemPlacements containerRef={foregroundRef} />}
-        </div>
-
-        {/* Wrapper for content with higher z-index */}
-        <div className="relative z-10">
-          {/* Game Header */}
-          <header className="w-full flex flex-col items-center mb-8">
-            <h1 className="text-3xl font-bold">Elementary Space Adventure</h1>
-          </header>
-
-          {/* Game Main Content */}
-          <main className="flex flex-col items-center gap-8">
-            {inQuestionMode ? (
-              <QuestionSet 
-                onComplete={handleQuestionsComplete} 
-                onBack={handleBackToSpaceship}
-                onQuestionChange={handleQuestionChange}
-              />
-            ) : (
-              <PlanetSelector onSelect={handlePlanetSelect} />
-            )}
-          </main>
-
-          {/* Currency Display: Only show on home screen */}
-          {!inQuestionMode && (
-            <div className="fixed bottom-22 left-10">
-              <CurrencyDisplay />
-            </div>
-          )}
-
-          {/* Shop Button: Only show on home screen */}
-          {!inQuestionMode && (
-            <button
-              onClick={() => setShowShop(true)}
-              className="fixed bottom-10 left-10 bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Shop
-            </button>
-          )}
-
-          {/* Shop Modal */}
-          {showShop && <Shop onClose={() => setShowShop(false)} />}
-
-          
-        </div>
-        
+        />
+        {/* Render ItemPlacements inside this container if desired */}
+        {!inQuestionMode && <ItemPlacements containerRef={foregroundRef} />}
       </div>
-     
+
+      {/* Wrapper for all interactive content with higher z-index */}
+      <div className="relative z-10">
+        {/* Game Header */}
+        <header className="w-full flex flex-col items-center mb-8">
+          <h1 className="text-3xl font-bold">Elementary Space Adventure</h1>
+        </header>
+
+        {/* Game Main Content */}
+        <main className="flex flex-col items-center gap-8">
+          {inQuestionMode ? (
+            <QuestionSet
+              onComplete={handleQuestionsComplete}
+              onBack={handleBackToSpaceship}
+              onQuestionChange={handleQuestionChange}
+            />
+          ) : (
+            <PlanetSelector onSelect={handlePlanetSelect} />
+          )}
+        </main>
+
+        {/* Currency Display (only on home screen) */}
+        {!inQuestionMode && (
+          <div className="fixed bottom-16 left-10">
+            <CurrencyDisplay />
+          </div>
+        )}
+
+        {/* Shop Button (only on home screen) */}
+        {!inQuestionMode && (
+          <button
+            onClick={() => setShowShop(true)}
+            className="fixed bottom-10 left-10 bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Shop
+          </button>
+        )}
+
+        {/* Shop Modal */}
+        {showShop && <Shop onClose={() => setShowShop(false)} />}
+      </div>
+    </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <GameProvider>
+      <HomeContent />
     </GameProvider>
   );
 }

@@ -12,6 +12,8 @@ interface GameContextProps extends GameState {
   addCurrency: (amount: number) => void;
   updateProgress: (key: string, value: any) => void;
   buyItem: (item: string, cost: number) => void;
+  completedPlanets: number[];
+  markPlanetCompleted: (planet: number) => void;
 }
 
 const GameContext = createContext<GameContextProps | undefined>(undefined);
@@ -21,6 +23,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [currency, setCurrency] = useState<number>(0);
   const [progress, setProgress] = useState<Record<string, any>>({});
   const [items, setItems] = useState<string[]>([]);
+  const [completedPlanets, setCompletedPlanets] = useState<number[]>([]);
 
   // Load saved state from localStorage on mount
   useEffect(() => {
@@ -31,17 +34,25 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setCurrency(state.currency);
       setProgress(state.progress);
       setItems(state.items);
+      if (state.completedPlanets) {
+        setCompletedPlanets(state.completedPlanets);
+      }
     }
   }, []);
 
   // Save state to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('gameState', JSON.stringify({ selectedPlanet, currency, progress, items }));
-  }, [selectedPlanet, currency, progress, items]);
+    localStorage.setItem(
+      'gameState',
+      JSON.stringify({ selectedPlanet, currency, progress, items, completedPlanets })
+    );
+  }, [selectedPlanet, currency, progress, items, completedPlanets]);
 
+  // Ensure no duplicate items
   useEffect(() => {
     setItems(prev => Array.from(new Set(prev)));
   }, []);
+
   const addCurrency = (amount: number) => {
     setCurrency(prev => prev + amount);
   };
@@ -63,9 +74,29 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const markPlanetCompleted = (planet: number) => {
+    setCompletedPlanets(prev => {
+      if (!prev.includes(planet)) {
+        return [...prev, planet];
+      }
+      return prev;
+    });
+  };
+
   return (
     <GameContext.Provider
-      value={{ selectedPlanet, currency, progress, items, setSelectedPlanet, addCurrency, updateProgress, buyItem }}
+      value={{
+        selectedPlanet,
+        currency,
+        progress,
+        items,
+        setSelectedPlanet,
+        addCurrency,
+        updateProgress,
+        buyItem,
+        completedPlanets,
+        markPlanetCompleted,
+      }}
     >
       {children}
     </GameContext.Provider>

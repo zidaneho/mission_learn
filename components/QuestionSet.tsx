@@ -404,7 +404,7 @@ const QuestionSet: React.FC<QuestionSetProps> = ({ onComplete, onBack, onQuestio
       <div className="mt-4 flex justify-center">
         <button 
           onClick={getHint} 
-          className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+          className="px-4 py-2 rounded border-2 border-teal-600 text-black hover:border-teal-500 hover:text-black hover:scale-105 hover:shadow-lg hover:shadow-teal-500 transition-all"
         >
           Get Hint
         </button>
