@@ -148,10 +148,20 @@ const PlanetSelector: React.FC<{ onSelect: () => void }> = ({ onSelect }) => {
         Select Planet
       </button>
 
-        <button onClick={planetFunFact}>Planet Fun fact</button>
-        {planetFact && <p>Fun fact: {planetFact}</p>}
-        <button onClick={encouragementText}>Words of encouragement</button>
-        {encouragementTest && <p>Encourage: {encouragementTest}</p>}
+      <div style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)' }}>
+          <Image
+            src="/right_arrow.png" // Place right_arrow.png in public folder
+            alt="Right Arrow"
+            width={50}
+            height={50}
+            onClick={planetFunFact}
+            className="cursor-pointer transition-transform duration-300 hover:scale-110"
+          />
+      </div>
+
+      <div style={{ position: 'fixed', bottom: '90px', left: '50%', transform: 'translateX(-50%)', width: '250px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.5)', backgroundColor: '#000009' }}>
+      {planetFact && <p>Fun fact: {planetFact}</p>}
+      </div>
     </div>
 
     
