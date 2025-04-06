@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { useGame } from '../context/GameContext';
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_SECRET_KEY });
+
 
 interface Question {
   question: string;
@@ -287,8 +291,12 @@ const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = (
   const [feedback, setFeedback] = useState<{ index: number; isCorrect: boolean } | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const [disableOptions, setDisableOptions] = useState(false);
+  
 
   const currentQuestion = questions[currentIndex];
+
+  const [encouragementTest, setEncourage] = useState<string | null>(null); // Explicitly initialize with null
+
 
   const handleAnswer = (optionIndex: number) => {
     if (disableOptions) return;
@@ -310,13 +318,37 @@ const QuestionSet: React.FC<{ onComplete: () => void; onBack: () => void; }> = (
     } else {
       setFeedback({ index: optionIndex, isCorrect: false });
       setDisableOptions(true);
-      setFeedbackMessage("That was the wrong option. Try again.");
+      // Call the encouragement
+      //setFeedbackMessage("well....");
+      encouragementText();
+      //setFeedbackMessage('${encouragementTest}');
+      
       setTimeout(() => {
         setFeedback(null);
         setFeedbackMessage(null);
         setDisableOptions(false);
-      }, 1000);
+      }, 6500); 
     }
+  };
+
+  const encouragementText = async () => {
+    var prompt = `Pretend I am a young kid who just answered a question incorrectly. Give me words of encouragement with a positive joking try again vibe. Make it only one line. If you can, make it astronomy themed`; // Construct the prompt
+    try {
+      const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: prompt,
+      });
+      if (response) {
+        //setEncourage(response.text ?? null); // Use null if response.text is undefined
+        setFeedbackMessage("huh");
+        setFeedbackMessage(response.text ?? null);
+      }
+      
+
+    } catch (error) {
+      console.error("Error fetching response from Gemini:", error);
+    }
+   
   };
 
   return (
