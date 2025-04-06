@@ -1,0 +1,110 @@
+/* Shop.css */
+
+/* Slide-in animation from the left */
+@keyframes slideInFromLeft {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  }
+  
+  /* Dimmed full-screen background behind the shop */
+  .shop-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 998;
+  }
+  
+  /* Main shop panel */
+  .shop-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 300px;
+    background-color: white;
+    padding: 24px;
+    border-radius: 0 12px 12px 0;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    border-right: 1px solid #ddd;
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #1a1a1a;
+    letter-spacing: 0.25px;
+    z-index: 999;
+    animation: slideInFromLeft 0.3s ease-out;
+    overflow-y: auto;
+  }
+  
+  /* Title at the top of the shop */
+  .shop-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #111;
+    text-align: center;
+  }
+  
+  /* Currency display */
+  .shop-currency {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .shop-currency span {
+    font-weight: 600;
+    color: #000;
+  }
+  
+  /* Shop item list */
+  .shop-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Individual item row */
+  .shop-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f7f7f7;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: background-color 0.2s ease;
+    color: #1a1a1a;
+  }
+  
+  .shop-item:hover {
+    background-color: #eaeaea;
+  }
+  
+  /* Buy button */
+  .buy-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .buy-button:hover {
+    background-color: #0056b3;
+  }
+
+  .shop-item small {
+    color: #666;
+    font-size: 13px;
+  }
+  
