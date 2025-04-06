@@ -1,14 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { GameProvider } from "../context/GameContext";
+import { GameProvider, useGame } from "../context/GameContext";
 import PlanetSelector from "../components/PlanetSelector";
 import QuestionSet from "../components/QuestionSet";
 import Shop from "../components/Shop";
-import {shopItems, ShopItem} from "../components/ShopItems";
+import { shopItems, ShopItem } from "../components/ShopItems";
 import ItemPlacements from "../components/ItemPlacements";
+import Image from "next/image";
 
-
+function CurrencyDisplay() {
+  const { currency } = useGame();
+  return (
+    <div className="flex items-center gap-2 px-4 py-2 rounded border border-white bg-black bg-opacity-50 text-white text-lg font-bold">
+      <Image src="/currency.png" alt="Coin" width={20} height={20} />
+      <span>{currency}</span>
+    </div>
+  );
+}
 
 export default function Home() {
   const [showShop, setShowShop] = useState(false);
@@ -29,11 +38,13 @@ export default function Home() {
     // Back button action from the planet's question view
     setInQuestionMode(false);
   };
-  
+
   return (
     <GameProvider>
-      <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] relative bg-center"
-      style={{backgroundImage: `url(${starsBackground})`}}>
+      <div
+        className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] relative bg-center"
+        style={{ backgroundImage: `url(${starsBackground})` }}
+      >
         {/* Game Header */}
         <header className="w-full flex flex-col items-center mb-8">
           <h1 className="text-3xl font-bold">Elementary Space Adventure</h1>
@@ -50,6 +61,13 @@ export default function Home() {
             <PlanetSelector onSelect={handlePlanetSelect} />
           )}
         </main>
+
+        {/* Currency Display: Only show on home screen */}
+        {!inQuestionMode && (
+          <div className="fixed bottom-25 left-10">
+            <CurrencyDisplay />
+          </div>
+        )}
 
         {/* Shop Button: Only show on home screen */}
         {!inQuestionMode && (
